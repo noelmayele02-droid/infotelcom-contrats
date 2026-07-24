@@ -339,19 +339,34 @@ const canvas=document.getElementById('sigCanvas');
 const ctx=canvas.getContext('2d');
 let drawing=false, hasSignature=false;
 
-function resizeCanvas(){
+function paintSigBackground(){
+  ctx.save();
+  ctx.setTransform(1,0,0,1,0,0);
+  ctx.fillStyle='#ffffff';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.restore();
+}
+
+function resizeCanvas(preserve){
+  const prevData = preserve && hasSignature ? canvas.toDataURL('image/png') : null;
   const rect=canvas.getBoundingClientRect();
   const ratio=window.devicePixelRatio||1;
   canvas.width=rect.width*ratio;
   canvas.height=220*ratio;
   ctx.scale(ratio,ratio);
-  ctx.strokeStyle='#0a2540';
-  ctx.lineWidth=2.2;
+  paintSigBackground();
+  ctx.strokeStyle='#000000';
+  ctx.lineWidth=2.6;
   ctx.lineCap='round';
   ctx.lineJoin='round';
+  if(prevData){
+    const img=new Image();
+    img.onload=()=>ctx.drawImage(img,0,0,canvas.width/ratio,canvas.height/ratio);
+    img.src=prevData;
+  }
 }
-window.addEventListener('resize',()=>{const d=canvas.toDataURL();resizeCanvas();});
-setTimeout(resizeCanvas,50);
+window.addEventListener('resize',()=>resizeCanvas(true));
+setTimeout(()=>resizeCanvas(false),50);
 
 function getPos(e){
   const rect=canvas.getBoundingClientRect();
@@ -370,7 +385,7 @@ canvas.addEventListener('touchmove',moveDraw,{passive:false});
 canvas.addEventListener('touchend',endDraw);
 
 function clearSig(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
+  paintSigBackground();
   hasSignature=false;
   document.getElementById('sigPlaceholder').style.display='flex';
 }
@@ -524,6 +539,8 @@ function downloadPDF(){
   doc.text('Signature du Collaborateur :', M, y);
   y+=10;
   try{
+    doc.setFillColor(255,255,255);
+    doc.rect(M, y, 220, 80, 'F');
     doc.addImage(savedData.signature_data, 'PNG', M, y, 220, 80);
   }catch(e){}
   y+=95;
