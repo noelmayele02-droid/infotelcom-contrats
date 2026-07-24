@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contrat de Collaboration — INFOTELCOM</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#02060e; --bg2:#060d1a; --card:#08111f;
+  --blue:#00a6ff; --cyan:#00e5ff;
+  --glow:rgba(0,166,255,.5);
+  --txt:#e2e8f0; --txt2:#7a8fa6; --txt3:#4a5f76;
+  --border:rgba(0,166,255,.15); --border2:rgba(255,255,255,.06);
+  --green:#10b981; --red:#ef4444;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);line-height:1.65;min-height:100vh}
+h1,h2,h3{font-family:'Space Grotesk',sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:2rem 1.4rem 5rem}
+.gt{background:linear-gradient(135deg,#fff 10%,var(--blue) 55%,var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* HEADER */
+header{text-align:center;padding:2.2rem 0 1.6rem}
+.logo{font-size:1.5rem;font-weight:800;letter-spacing:-.03em}
+.logo span{color:var(--blue)}
+.htitle{font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:800;letter-spacing:-.03em;margin-top:.9rem}
+.hsub{color:var(--txt2);font-size:.88rem;margin-top:.5rem}
+
+/* STEPPER */
+.steps{display:flex;justify-content:center;gap:.5rem;margin:1.8rem 0 2.2rem;flex-wrap:wrap}
+.step{display:flex;align-items:center;gap:.5rem;padding:.5rem 1rem;border-radius:9999px;background:var(--card);border:1px solid var(--border2);font-size:.76rem;font-weight:600;color:var(--txt3);transition:all .3s}
+.step.active{border-color:var(--blue);color:var(--blue);box-shadow:0 0 16px var(--glow)}
+.step.done{color:var(--green);border-color:rgba(16,185,129,.3)}
+.step-n{width:20px;height:20px;border-radius:50%;background:currentColor;color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:.68rem;flex-shrink:0}
+.step.active .step-n,.step.done .step-n{background:currentColor}
+
+/* PANELS */
+.panel{display:none;background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:1.8rem}
+.panel.on{display:block;animation:fadein .4s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.panel h2{font-size:1.2rem;margin-bottom:1.4rem;display:flex;align-items:center;gap:.6rem}
+
+/* FORM */
+.frow2{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1rem}
+.frow{margin-bottom:1rem}
+label{display:block;font-size:.76rem;font-weight:600;color:var(--txt2);margin-bottom:.35rem}
+label .req{color:var(--blue)}
+.fi{width:100%;background:rgba(255,255,255,.03);border:1px solid var(--border2);border-radius:10px;padding:.72rem .9rem;color:var(--txt);font-family:inherit;font-size:.86rem;outline:none;transition:all .2s}
+.fi:focus{border-color:var(--blue);background:rgba(0,166,255,.04);box-shadow:0 0 0 3px rgba(0,166,255,.08)}
+select.fi option{background:var(--card)}
+.err-msg{color:var(--red);font-size:.75rem;margin-top:1rem;display:none;padding:.7rem 1rem;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:10px}
+.err-msg.show{display:block}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.78rem 1.6rem;border-radius:9999px;font-weight:700;font-size:.85rem;border:none;cursor:pointer;transition:all .25s;font-family:inherit}
+.btn-p{background:linear-gradient(135deg,var(--blue),var(--cyan));color:#000;box-shadow:0 0 22px var(--glow)}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 0 36px var(--glow)}
+.btn-p:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-g{background:transparent;border:1.5px solid var(--border2);color:var(--txt)}
+.btn-g:hover{border-color:var(--blue);color:var(--blue)}
+.btn-wa{background:#25D366;color:#fff}
+.btn-wa:hover{transform:translateY(-2px);box-shadow:0 0 24px rgba(37,211,102,.5)}
+.btn-row{display:flex;justify-content:space-between;gap:.8rem;margin-top:1.8rem;flex-wrap:wrap}
+.btn-row.center{justify-content:center}
+
+/* CONTRACT TEXT */
+.doc-box{max-height:420px;overflow-y:auto;background:rgba(255,255,255,.02);border:1px solid var(--border2);border-radius:14px;padding:1.4rem;font-size:.82rem;color:var(--txt2)}
+.doc-box::-webkit-scrollbar{width:7px}
+.doc-box::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.doc-box h3{color:var(--txt);font-size:.92rem;margin:1.3rem 0 .5rem}
+.doc-box h3:first-child{margin-top:0}
+.doc-box p{margin-bottom:.7rem}
+.doc-box ul{margin:.4rem 0 .8rem 1.2rem}
+.doc-box li{margin-bottom:.3rem}
+.doc-box strong{color:var(--txt)}
+.scroll-hint{text-align:center;font-size:.72rem;color:var(--txt3);margin-top:.6rem;display:flex;align-items:center;justify-content:center;gap:.4rem}
+.scroll-hint.done{color:var(--green)}
+
+.check-row{display:flex;align-items:flex-start;gap:.7rem;margin-top:1.1rem;padding:.9rem 1rem;background:rgba(255,255,255,.02);border:1px solid var(--border2);border-radius:12px;cursor:pointer;transition:all .2s}
+.check-row:hover{border-color:var(--border)}
+.check-row input{margin-top:.15rem;width:16px;height:16px;accent-color:var(--blue);flex-shrink:0;cursor:pointer}
+.check-row span{font-size:.8rem;color:var(--txt2)}
+.check-row.disabled{opacity:.4;pointer-events:none}
+
+/* SIGNATURE */
+.sig-wrap{background:#fff;border-radius:14px;overflow:hidden;border:2px dashed var(--border);position:relative}
+#sigCanvas{display:block;width:100%;height:220px;touch-action:none;cursor:crosshair}
+.sig-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:.85rem;pointer-events:none;font-family:'Space Grotesk',sans-serif}
+.recap{background:rgba(255,255,255,.02);border:1px solid var(--border2);border-radius:14px;padding:1.1rem 1.3rem;margin-bottom:1.2rem;font-size:.82rem}
+.recap-row{display:flex;justify-content:space-between;padding:.4rem 0;border-bottom:1px solid var(--border2)}
+.recap-row:last-child{border:none}
+.recap-row span:first-child{color:var(--txt2)}
+.recap-row span:last-child{font-weight:600}
+
+/* SUCCESS SCREEN */
+.success{text-align:center;padding:1rem 0}
+.success-icon{width:74px;height:74px;border-radius:50%;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 1.3rem;font-size:2rem}
+.success h2{justify-content:center;font-size:1.35rem}
+.contract-num{display:inline-block;margin:.9rem 0 1.5rem;padding:.5rem 1.1rem;border-radius:9999px;background:rgba(0,166,255,.08);border:1px solid var(--border);color:var(--blue);font-weight:700;font-size:.85rem;letter-spacing:.03em}
+.share-note{font-size:.74rem;color:var(--txt3);margin-top:1.2rem;padding:.9rem 1.1rem;background:rgba(255,255,255,.02);border-radius:10px;border:1px solid var(--border2);text-align:left}
+
+/* LOADING */
+.spin{width:16px;height:16px;border:2px solid rgba(0,0,0,.25);border-top-color:#000;border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="logo">Info<span>telcom</span></div>
+    <h1 class="htitle">Contrat de <span class="gt">Collaboration</span></h1>
+    <p class="hsub">Rejoindre l'équipe INFOTELCOM commence ici — remplissez, lisez, signez.</p>
+  </header>
+
+  <div class="steps">
+    <div class="step active" id="stepTab1"><span class="step-n">1</span>Informations</div>
+    <div class="step" id="stepTab2"><span class="step-n">2</span>Lecture du contrat</div>
+    <div class="step" id="stepTab3"><span class="step-n">3</span>Signature</div>
+  </div>
+
+  <!-- ═══ ÉTAPE 1 — INFORMATIONS ═══ -->
+  <div class="panel on" id="panel1">
+    <h2>📋 Vos informations</h2>
+    <div class="frow2">
+      <div><label>Nom <span class="req">*</span></label><input id="fNom" class="fi" placeholder="Votre nom"></div>
+      <div><label>Prénom <span class="req">*</span></label><input id="fPrenom" class="fi" placeholder="Votre prénom"></div>
+    </div>
+    <div class="frow2">
+      <div><label>Date de naissance</label><input id="fNaissance" type="date" class="fi"></div>
+      <div><label>Téléphone <span class="req">*</span></label><input id="fTel" class="fi" placeholder="+242 ..."></div>
+    </div>
+    <div class="frow"><label>Email <span class="req">*</span></label><input id="fEmail" type="email" class="fi" placeholder="votre@email.com"></div>
+    <div class="frow"><label>Adresse</label><input id="fAdresse" class="fi" placeholder="Quartier, ville"></div>
+    <div class="frow2">
+      <div><label>Poste proposé <span class="req">*</span></label><input id="fPoste" class="fi" placeholder="Ex : Développeur Full Stack"></div>
+      <div><label>Type de contrat <span class="req">*</span></label>
+        <select id="fType" class="fi">
+          <option value="">-- Choisir --</option>
+          <option>CDI (Contrat à Durée Indéterminée)</option>
+          <option>CDD (Contrat à Durée Déterminée)</option>
+          <option>Stage</option>
+          <option>Freelance / Prestation</option>
+          <option>Collaborateur bénévole</option>
+        </select>
+      </div>
+    </div>
+    <div class="frow2">
+      <div><label>Date de début <span class="req">*</span></label><input id="fDebut" type="date" class="fi"></div>
+      <div><label>Période d'essai</label>
+        <select id="fEssai" class="fi">
+          <option value="Aucune">Aucune</option>
+          <option value="1 mois">1 mois</option>
+          <option value="2 mois" selected>2 mois</option>
+          <option value="3 mois">3 mois</option>
+        </select>
+      </div>
+    </div>
+    <div class="err-msg" id="err1">⚠️ Merci de remplir tous les champs obligatoires (*) avant de continuer.</div>
+    <div class="btn-row" style="justify-content:flex-end">
+      <button class="btn btn-p" onclick="goStep(2)">Continuer vers le contrat →</button>
+    </div>
+  </div>
+
+  <!-- ═══ ÉTAPE 2 — LECTURE DU CONTRAT ═══ -->
+  <div class="panel" id="panel2">
+    <h2>📄 Contrat &amp; Règlement Intérieur</h2>
+    <div class="doc-box" id="docBox" onscroll="checkScroll()">
+      <h3>Préambule</h3>
+      <p>Le présent contrat est conclu entre <strong>INFOTELCOM</strong>, startup technologique dont le siège social est situé au 17 rue Lingue, Nkombo, Brazzaville, République du Congo (ci-après « l'Entreprise »), et la personne identifiée à l'étape précédente (ci-après « le Collaborateur »).</p>
+
+      <h3>Article 1 — Objet</h3>
+      <p>Le présent contrat a pour objet de définir les conditions dans lesquelles le Collaborateur exercera son activité au sein d'INFOTELCOM, au poste et selon la nature de contrat renseignés dans le formulaire, ainsi que les droits et obligations réciproques des deux parties.</p>
+
+      <h3>Article 2 — Durée et période d'essai</h3>
+      <p>Le contrat prend effet à la date de début renseignée. Sauf mention contraire, une période d'essai s'applique, durant laquelle chacune des parties peut mettre fin à la collaboration avec un préavis raisonnable, sans indemnité, sous réserve du respect des dispositions légales applicables en République du Congo.</p>
+
+      <h3>Article 3 — Missions et responsabilités</h3>
+      <p>Le Collaborateur s'engage à exécuter les missions liées à son poste avec diligence, professionnalisme et loyauté, dans le respect des délais convenus avec sa hiérarchie. Les missions pourront évoluer avec l'accord des deux parties en fonction des besoins de l'Entreprise.</p>
+
+      <h3>Article 4 — Lieu et organisation du travail</h3>
+      <p>L'activité s'exerce à Brazzaville, en présentiel et/ou à distance selon les modalités définies avec le responsable direct. Les horaires de référence sont du lundi au vendredi, 8h00–18h00, et le samedi 9h00–14h00 selon les besoins du service.</p>
+
+      <h3>Article 5 — Rémunération</h3>
+      <p>Les modalités de rémunération (montant, périodicité, avantages éventuels) font l'objet d'un accord distinct communiqué au Collaborateur avant la signature, et ne sont pas reproduites dans ce document à des fins de confidentialité. En cas de collaboration bénévole ou de stage non rémunéré, cela est explicitement mentionné dans le formulaire.</p>
+
+      <h3>Article 6 — Propriété intellectuelle</h3>
+      <p>Tout code, document, design, méthode ou création réalisé par le Collaborateur dans le cadre de ses missions pour INFOTELCOM est la propriété exclusive de l'Entreprise, sauf accord écrit contraire. Le Collaborateur cède à INFOTELCOM l'ensemble des droits patrimoniaux afférents à ces créations.</p>
+
+      <h3>Article 7 — Confidentialité et non-divulgation</h3>
+      <p>Le Collaborateur s'engage à conserver la stricte confidentialité de toute information relative aux clients, projets, code source, données techniques, stratégies commerciales et documents internes d'INFOTELCOM, pendant toute la durée de la collaboration et après sa cessation, sans limitation de durée pour les secrets d'affaires.</p>
+
+      <h3>Article 8 — Protection des données personnelles</h3>
+      <p>Les informations personnelles collectées dans le cadre de ce contrat (identité, coordonnées, signature) sont utilisées exclusivement pour la gestion administrative de la relation de collaboration et sont conservées de manière sécurisée. Elles ne sont communiquées à aucun tiers sans consentement, sauf obligation légale.</p>
+
+      <h3>Article 9 — Règlement intérieur</h3>
+      <p>Le Collaborateur reconnaît avoir pris connaissance du règlement intérieur d'INFOTELCOM et s'engage à le respecter, notamment :</p>
+      <ul>
+        <li>Ponctualité et respect des horaires de travail convenus ;</li>
+        <li>Comportement professionnel, courtois et respectueux envers l'équipe, les clients et les partenaires ;</li>
+        <li>Usage raisonnable et exclusivement professionnel du matériel, des comptes et des outils fournis par l'Entreprise ;</li>
+        <li>Interdiction d'utiliser les ressources de l'Entreprise à des fins personnelles ou pour un tiers concurrent ;</li>
+        <li>Signalement immédiat de tout incident de sécurité informatique ou de toute anomalie constatée ;</li>
+        <li>Respect des consignes de sécurité informatique (mots de passe, accès, données clients) ;</li>
+        <li>Interdiction de toute forme de harcèlement, discrimination ou comportement portant atteinte à la dignité d'autrui.</li>
+      </ul>
+      <p>Tout manquement à ces règles pourra faire l'objet, selon sa gravité, d'un rappel à l'ordre, d'un avertissement écrit, ou d'une rupture de la collaboration, dans le respect des procédures légales applicables.</p>
+
+      <h3>Article 10 — Clause de non-concurrence</h3>
+      <p>Pendant la durée de la collaboration et pour une période de <strong>6 mois</strong> suivant sa cessation, le Collaborateur s'engage à ne pas exercer d'activité directement concurrente à celle d'INFOTELCOM, ni solliciter la clientèle ou les partenaires de l'Entreprise à titre personnel ou pour le compte d'un tiers, sur le territoire de la République du Congo.</p>
+
+      <h3>Article 11 — Rupture du contrat</h3>
+      <p>Chaque partie peut mettre fin au présent contrat moyennant un préavis écrit, dont la durée dépend du type de contrat et de l'ancienneté, conformément au Code du Travail congolais. En cas de faute grave, la rupture peut être immédiate, sans préavis ni indemnité, après notification écrite des motifs.</p>
+
+      <h3>Article 12 — Droit applicable et juridiction compétente</h3>
+      <p>Le présent contrat est régi par le droit de la République du Congo. Tout litige relatif à son interprétation ou à son exécution qui ne pourrait être résolu à l'amiable sera soumis aux juridictions compétentes de Brazzaville.</p>
+
+      <h3>Article 13 — Signature électronique</h3>
+      <p>Les parties reconnaissent la validité juridique de la signature électronique apposée via ce formulaire, laquelle a la même valeur probante qu'une signature manuscrite entre elles, conformément aux principes généraux applicables à la preuve électronique.</p>
+
+      <p style="margin-top:1.4rem;font-size:.72rem;color:var(--txt3)"><em>Ce document constitue un modèle-cadre standardisé. INFOTELCOM se réserve le droit d'y adjoindre un avenant spécifique (rémunération, clauses particulières) communiqué séparément au Collaborateur.</em></p>
+    </div>
+    <div class="scroll-hint" id="scrollHint">↓ Faites défiler jusqu'en bas pour activer les cases d'acceptation ↓</div>
+
+    <label class="check-row disabled" id="chk1row"><input type="checkbox" id="chk1" disabled onchange="updateSignBtn()"><span>J'ai lu et j'accepte l'intégralité des termes du présent contrat de collaboration (Articles 1 à 13).</span></label>
+    <label class="check-row disabled" id="chk2row"><input type="checkbox" id="chk2" disabled onchange="updateSignBtn()"><span>J'ai lu et j'accepte le règlement intérieur ainsi que la clause de confidentialité et de non-concurrence.</span></label>
+
+    <div class="btn-row">
+      <button class="btn btn-g" onclick="goStep(1)">← Retour</button>
+      <button class="btn btn-p" id="toStep3Btn" disabled onclick="goStep(3)">Continuer vers la signature →</button>
+    </div>
+  </div>
+
+  <!-- ═══ ÉTAPE 3 — SIGNATURE ═══ -->
+  <div class="panel" id="panel3">
+    <h2>✍️ Signature électronique</h2>
+    <div class="recap" id="recapBox"></div>
+
+    <label style="font-size:.76rem;font-weight:600;color:var(--txt2);margin-bottom:.5rem;display:block">Signez ci-dessous avec votre souris ou votre doigt</label>
+    <div class="sig-wrap">
+      <canvas id="sigCanvas"></canvas>
+      <div class="sig-placeholder" id="sigPlaceholder">Signez ici</div>
+    </div>
+    <div class="btn-row" style="margin-top:.8rem">
+      <button class="btn btn-g" onclick="clearSig()">🗑 Effacer</button>
+      <span></span>
+    </div>
+
+    <div class="err-msg" id="err3">⚠️ Merci de signer avant de valider.</div>
+
+    <div class="btn-row">
+      <button class="btn btn-g" onclick="goStep(2)">← Retour</button>
+      <button class="btn btn-p" id="submitBtn" onclick="submitContract()">🔒 Signer et valider le contrat</button>
+    </div>
+  </div>
+
+  <!-- ═══ ÉCRAN DE SUCCÈS ═══ -->
+  <div class="panel" id="panelSuccess">
+    <div class="success">
+      <div class="success-icon">✅</div>
+      <h2 style="display:block">Contrat signé avec succès !</h2>
+      <p style="color:var(--txt2);font-size:.85rem">Bienvenue dans l'équipe INFOTELCOM. Votre contrat a été enregistré dans notre système.</p>
+      <div class="contract-num" id="contractNumDisplay"></div>
+      <div class="btn-row center">
+        <button class="btn btn-p" onclick="downloadPDF()">⬇️ Télécharger le PDF</button>
+        <a id="waBtn" class="btn btn-wa" target="_blank" rel="noopener">
+          <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.6-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.1-.4-2.1-1.3-.8-.7-1.3-1.6-1.5-1.8-.1-.3 0-.4.1-.5l.4-.5c.1-.1.2-.3.2-.4.1-.1 0-.3 0-.4-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.5h-.5c-.2 0-.4.1-.6.3-.2.3-.8.8-.8 1.9s.8 2.2.9 2.4c.1.1 1.6 2.5 4 3.5.6.2 1 .4 1.3.5.6.2 1.1.2 1.5.1.5-.1 1.6-.6 1.8-1.3.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.4c1.4.8 3.1 1.2 4.8 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.5 0-3-.4-4.2-1.2l-.3-.2-3.1.8.8-3-.2-.3C4.2 14.9 3.8 13.5 3.8 12c0-4.5 3.7-8.2 8.2-8.2s8.2 3.7 8.2 8.2-3.7 8.2-8.2 8.2z"/></svg>
+          Envoyer via WhatsApp
+        </a>
+        <a id="mailBtn" class="btn btn-g">✉️ Envoyer par Email</a>
+      </div>
+      <div class="share-note">
+        ℹ️ Pour des raisons de sécurité du navigateur, WhatsApp et l'email ne peuvent pas joindre automatiquement le fichier. Téléchargez d'abord le PDF, puis joignez-le manuellement dans la conversation ou l'email qui s'ouvre.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+/* ══ SUPABASE CONFIG — mêmes clés que le site principal ══ */
+/* ⚠️ À REMPLACER — colle ici l'URL et la clé de TON NOUVEAU projet Supabase
+   dédié aux contrats (voir SETUP-SUPABASE.md, Étape 1). Ne pas réutiliser
+   les identifiants du site principal INFOTELCOM. */
+const SUPABASE_URL = 'https://jznahxmamcxinpwjzksc.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_W-qlzNRoJ-slHys-pATuNQ_MSL1pnAJ';
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/* ══ STEPPER ══ */
+let currentStep = 1;
+function goStep(n){
+  if(n===2 && !validateStep1())return;
+  if(n===3 && !(document.getElementById('chk1').checked && document.getElementById('chk2').checked))return;
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.getElementById('panel'+n).classList.add('on');
+  [1,2,3].forEach(i=>{
+    const t=document.getElementById('stepTab'+i);
+    t.classList.remove('active','done');
+    if(i<n)t.classList.add('done');
+    if(i===n)t.classList.add('active');
+  });
+  currentStep=n;
+  if(n===3)buildRecap();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function validateStep1(){
+  const req=['fNom','fPrenom','fTel','fEmail','fPoste','fType','fDebut'];
+  const missing=req.some(id=>!document.getElementById(id).value.trim());
+  document.getElementById('err1').classList.toggle('show',missing);
+  return !missing;
+}
+
+/* ══ SCROLL LOCK ON CONTRACT ══ */
+function checkScroll(){
+  const box=document.getElementById('docBox');
+  const atBottom = box.scrollTop + box.clientHeight >= box.scrollHeight - 30;
+  if(atBottom){
+    document.getElementById('chk1').disabled=false;
+    document.getElementById('chk2').disabled=false;
+    document.getElementById('chk1row').classList.remove('disabled');
+    document.getElementById('chk2row').classList.remove('disabled');
+    const hint=document.getElementById('scrollHint');
+    hint.textContent='✓ Lecture terminée — vous pouvez cocher les cases ci-dessous';
+    hint.classList.add('done');
+  }
+}
+function updateSignBtn(){
+  const ok=document.getElementById('chk1').checked && document.getElementById('chk2').checked;
+  document.getElementById('toStep3Btn').disabled=!ok;
+}
+
+/* ══ SIGNATURE CANVAS ══ */
+const canvas=document.getElementById('sigCanvas');
+const ctx=canvas.getContext('2d');
+let drawing=false, hasSignature=false;
+
+function resizeCanvas(){
+  const rect=canvas.getBoundingClientRect();
+  const ratio=window.devicePixelRatio||1;
+  canvas.width=rect.width*ratio;
+  canvas.height=220*ratio;
+  ctx.scale(ratio,ratio);
+  ctx.strokeStyle='#0a2540';
+  ctx.lineWidth=2.2;
+  ctx.lineCap='round';
+  ctx.lineJoin='round';
+}
+window.addEventListener('resize',()=>{const d=canvas.toDataURL();resizeCanvas();});
+setTimeout(resizeCanvas,50);
+
+function getPos(e){
+  const rect=canvas.getBoundingClientRect();
+  const t=e.touches?e.touches[0]:e;
+  return {x:t.clientX-rect.left, y:t.clientY-rect.top};
+}
+function startDraw(e){drawing=true;hasSignature=true;document.getElementById('sigPlaceholder').style.display='none';const p=getPos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);e.preventDefault();}
+function moveDraw(e){if(!drawing)return;const p=getPos(e);ctx.lineTo(p.x,p.y);ctx.stroke();e.preventDefault();}
+function endDraw(){drawing=false;}
+canvas.addEventListener('mousedown',startDraw);
+canvas.addEventListener('mousemove',moveDraw);
+canvas.addEventListener('mouseup',endDraw);
+canvas.addEventListener('mouseleave',endDraw);
+canvas.addEventListener('touchstart',startDraw,{passive:false});
+canvas.addEventListener('touchmove',moveDraw,{passive:false});
+canvas.addEventListener('touchend',endDraw);
+
+function clearSig(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  hasSignature=false;
+  document.getElementById('sigPlaceholder').style.display='flex';
+}
+
+/* ══ RECAP ══ */
+function getFormData(){
+  return {
+    nom: document.getElementById('fNom').value.trim(),
+    prenom: document.getElementById('fPrenom').value.trim(),
+    date_naissance: document.getElementById('fNaissance').value || null,
+    telephone: document.getElementById('fTel').value.trim(),
+    email: document.getElementById('fEmail').value.trim(),
+    adresse: document.getElementById('fAdresse').value.trim(),
+    poste: document.getElementById('fPoste').value.trim(),
+    type_contrat: document.getElementById('fType').value,
+    date_debut: document.getElementById('fDebut').value,
+    duree_periode_essai: document.getElementById('fEssai').value
+  };
+}
+function buildRecap(){
+  const d=getFormData();
+  document.getElementById('recapBox').innerHTML=`
+    <div class="recap-row"><span>Nom complet</span><span>${d.prenom} ${d.nom}</span></div>
+    <div class="recap-row"><span>Poste</span><span>${d.poste}</span></div>
+    <div class="recap-row"><span>Type de contrat</span><span>${d.type_contrat}</span></div>
+    <div class="recap-row"><span>Date de début</span><span>${d.date_debut}</span></div>
+    <div class="recap-row"><span>Période d'essai</span><span>${d.duree_periode_essai}</span></div>
+    <div class="recap-row"><span>Email</span><span>${d.email}</span></div>`;
+}
+
+/* ══ NUMÉRO DE CONTRAT ══ */
+function genContractNum(){
+  const y=new Date().getFullYear();
+  const rand=Math.floor(1000+Math.random()*9000);
+  return `INFO-CTR-${y}-${rand}`;
+}
+
+let savedData=null;
+
+/* ══ SOUMISSION ══ */
+async function submitContract(){
+  if(!hasSignature){
+    document.getElementById('err3').classList.add('show');
+    return;
+  }
+  document.getElementById('err3').classList.remove('show');
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true;
+  btn.innerHTML='<span class="spin"></span> Enregistrement...';
+
+  const d=getFormData();
+  const numero=genContractNum();
+  const signatureData=canvas.toDataURL('image/png');
+
+  const record={
+    numero_contrat:numero,
+    nom:d.nom, prenom:d.prenom, date_naissance:d.date_naissance,
+    adresse:d.adresse, email:d.email, telephone:d.telephone,
+    poste:d.poste, type_contrat:d.type_contrat, date_debut:d.date_debut,
+    duree_periode_essai:d.duree_periode_essai,
+    accepte_contrat:true, accepte_reglement:true, accepte_confidentialite:true,
+    signature_data:signatureData,
+    user_agent:navigator.userAgent
+  };
+
+  try{
+    const {error}=await sb.from('contrats_signes').insert([record]);
+    if(error)throw error;
+  }catch(err){
+    btn.disabled=false;
+    btn.innerHTML='🔒 Signer et valider le contrat';
+    alert("Erreur d'enregistrement : "+(err.message||'inconnue')+"\n\nVérifiez la configuration Supabase (voir SETUP-SUPABASE.md), ou contactez INFOTELCOM directement.");
+    return;
+  }
+
+  savedData={...d, numero_contrat:numero, signature_data:signatureData};
+
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.getElementById('panelSuccess').classList.add('on');
+  document.getElementById('contractNumDisplay').textContent='N° '+numero;
+
+  const waText=encodeURIComponent(`Bonjour INFOTELCOM,\n\nJe viens de signer mon contrat de collaboration.\nNom : ${d.prenom} ${d.nom}\nPoste : ${d.poste}\nN° de contrat : ${numero}\n\nJe joins le PDF signé à ce message.`);
+  document.getElementById('waBtn').href=`https://wa.me/242068498792?text=${waText}`;
+
+  const mailSubject=encodeURIComponent(`Contrat signé — ${d.prenom} ${d.nom} — ${numero}`);
+  const mailBody=encodeURIComponent(`Bonjour,\n\nVeuillez trouver ci-joint mon contrat de collaboration signé.\n\nNom : ${d.prenom} ${d.nom}\nPoste : ${d.poste}\nType de contrat : ${d.type_contrat}\nN° de contrat : ${numero}\n\n(Pensez à joindre le PDF téléchargé à cet email avant envoi.)`);
+  document.getElementById('mailBtn').href=`mailto:contact.infotelcom@gmail.com?subject=${mailSubject}&body=${mailBody}`;
+  document.getElementById('mailBtn').onclick=()=>{window.location.href=`mailto:contact.infotelcom@gmail.com?subject=${mailSubject}&body=${mailBody}`;};
+
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ══ GÉNÉRATION PDF ══ */
+function downloadPDF(){
+  if(!savedData)return;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({unit:'pt',format:'a4'});
+  const W=595, M=48;
+  let y=56;
+
+  doc.setFont('helvetica','bold'); doc.setFontSize(18); doc.setTextColor(10,20,40);
+  doc.text('INFOTELCOM', M, y);
+  doc.setFontSize(10); doc.setTextColor(100,116,139); doc.setFont('helvetica','normal');
+  doc.text('Startup Technologique — Brazzaville, République du Congo', M, y+16);
+  doc.setDrawColor(0,166,255); doc.setLineWidth(1.2);
+  doc.line(M, y+28, W-M, y+28);
+  y+=54;
+
+  doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.setTextColor(10,20,40);
+  doc.text('CONTRAT DE COLLABORATION', M, y); y+=18;
+  doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(70,85,105);
+  doc.text('N° de contrat : '+savedData.numero_contrat, M, y); y+=26;
+
+  const rows=[
+    ['Nom complet', savedData.prenom+' '+savedData.nom],
+    ['Email', savedData.email],
+    ['Téléphone', savedData.telephone],
+    ['Adresse', savedData.adresse||'—'],
+    ['Poste', savedData.poste],
+    ['Type de contrat', savedData.type_contrat],
+    ['Date de début', savedData.date_debut],
+    ["Période d'essai", savedData.duree_periode_essai],
+    ['Date de signature', new Date().toLocaleDateString('fr-FR')]
+  ];
+  doc.setFontSize(10);
+  rows.forEach(([k,v])=>{
+    doc.setFont('helvetica','bold'); doc.setTextColor(30,41,59);
+    doc.text(k+' :', M, y);
+    doc.setFont('helvetica','normal'); doc.setTextColor(71,85,105);
+    doc.text(String(v), M+150, y);
+    y+=18;
+  });
+  y+=14;
+
+  doc.setDrawColor(226,232,240); doc.setLineWidth(0.6); doc.line(M,y,W-M,y); y+=20;
+
+  const clauses=[
+    "Le Collaborateur reconnaît avoir lu et accepté l'intégralité des articles du contrat de collaboration INFOTELCOM (objet, durée, missions, rémunération, propriété intellectuelle, confidentialité, protection des données, règlement intérieur, clause de non-concurrence, résiliation, droit applicable et signature électronique).",
+    "Le Collaborateur reconnaît avoir pris connaissance du règlement intérieur et s'engage à le respecter dans le cadre de sa collaboration avec INFOTELCOM.",
+    "Cette signature électronique a été apposée le "+new Date().toLocaleString('fr-FR')+" et a valeur probante entre les parties."
+  ];
+  doc.setFont('helvetica','normal'); doc.setFontSize(9.5); doc.setTextColor(71,85,105);
+  clauses.forEach(c=>{
+    const lines=doc.splitTextToSize(c, W-2*M);
+    doc.text(lines, M, y);
+    y+=lines.length*13+10;
+  });
+
+  y+=10;
+  doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(30,41,59);
+  doc.text('Signature du Collaborateur :', M, y);
+  y+=10;
+  try{
+    doc.addImage(savedData.signature_data, 'PNG', M, y, 220, 80);
+  }catch(e){}
+  y+=95;
+  doc.setDrawColor(203,213,225); doc.line(M, y, M+220, y);
+  doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(100,116,139);
+  doc.text(savedData.prenom+' '+savedData.nom, M, y+14);
+
+  doc.setFontSize(8); doc.setTextColor(148,163,184);
+  doc.text('Document généré automatiquement par la plateforme de signature INFOTELCOM.', M, 800);
+  doc.text('contact.infotelcom@gmail.com  ·  +242 068 498 792  ·  17 rue Lingue, Nkombo, Brazzaville', M, 812);
+
+  doc.save(`Contrat-INFOTELCOM-${savedData.nom}-${savedData.numero_contrat}.pdf`);
+}
+</script>
+</body>
+</html>
