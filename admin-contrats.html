@@ -356,7 +356,11 @@ function regeneratePDF(){
   doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(30,41,59);
   doc.text('Signature du Collaborateur :', M, y);
   y+=10;
-  try{ doc.addImage(c.signature_data, 'PNG', M, y, 220, 80); }catch(e){}
+  try{
+    doc.setFillColor(255,255,255);
+    doc.rect(M, y, 220, 80, 'F');
+    doc.addImage(c.signature_data, 'PNG', M, y, 220, 80);
+  }catch(e){}
   y+=95;
   doc.setDrawColor(203,213,225); doc.line(M, y, M+220, y);
   doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(100,116,139);
