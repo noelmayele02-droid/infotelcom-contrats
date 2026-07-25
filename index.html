@@ -438,7 +438,7 @@ async function submitContract(){
 
   const d=getFormData();
   const numero=genContractNum();
-  const signatureData=canvas.toDataURL('image/png');
+  const signatureData=canvas.toDataURL('image/png',1.0);
 
   const record={
     numero_contrat:numero,
