@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infotelcom — Accès au contrat</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#02060e; --card:#08111f;
+  --blue:#00a6ff; --cyan:#00e5ff;
+  --glow:rgba(0,166,255,.5);
+  --txt:#e2e8f0; --txt2:#7a8fa6;
+  --border2:rgba(255,255,255,.06);
+  --red:#ef4444;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem}
+h1,h2{font-family:'Space Grotesk',sans-serif}
+.gt{background:linear-gradient(135deg,#fff 10%,var(--blue) 55%,var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.box{width:100%;max-width:420px;background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:2.2rem}
+.logo{text-align:center;font-size:1.4rem;font-weight:800;margin-bottom:.3rem}
+.logo span{color:var(--blue)}
+.sub{text-align:center;color:var(--txt2);font-size:.82rem;margin-bottom:1.8rem;line-height:1.5}
+label{display:block;font-size:.76rem;font-weight:600;color:var(--txt2);margin-bottom:.35rem;margin-top:1rem}
+.fi{width:100%;background:rgba(255,255,255,.03);border:1px solid var(--border2);border-radius:10px;padding:.72rem .9rem;color:var(--txt);font-family:inherit;font-size:.86rem;outline:none}
+.fi:focus{border-color:var(--blue)}
+.btn{width:100%;margin-top:1.6rem;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.8rem 1.4rem;border-radius:9999px;font-weight:700;font-size:.86rem;border:none;cursor:pointer;transition:all .25s;font-family:inherit;background:linear-gradient(135deg,var(--blue),var(--cyan));color:#000;box-shadow:0 0 20px var(--glow)}
+.btn:hover{transform:translateY(-2px)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.err{color:var(--red);font-size:.78rem;margin-top:1rem;display:none;padding:.7rem;background:rgba(239,68,68,.08);border-radius:10px;border:1px solid rgba(239,68,68,.25)}
+.err.show{display:block}
+.spin{width:15px;height:15px;border:2px solid rgba(0,0,0,.25);border-top-color:#000;border-radius:50%;animation:sp .7s linear infinite;display:inline-block}
+@keyframes sp{to{transform:rotate(360deg)}}
+.redirectMsg{text-align:center;padding:1rem 0}
+.redirectMsg .spin2{width:26px;height:26px;border:3px solid rgba(0,166,255,.2);border-top-color:var(--blue);border-radius:50%;animation:sp .8s linear infinite;margin:0 auto 1rem}
+</style>
+</head>
+<body>
+
+<div class="box" id="formBox">
+  <div class="logo">Info<span>telcom</span></div>
+  <p class="sub">Renseignez vos informations pour recevoir votre accès<br>au formulaire de contrat.</p>
+
+  <label>Vous êtes...</label>
+  <div style="display:flex;gap:.6rem;margin-top:.3rem">
+    <button type="button" id="typeBtnClient" class="typeBtn typeBtn-on" onclick="setType('client')" style="flex:1;padding:.7rem;border-radius:10px;border:1.5px solid var(--blue);background:rgba(0,166,255,.1);color:var(--txt);font-weight:700;font-size:.82rem;cursor:pointer;font-family:inherit">🧾 Client</button>
+    <button type="button" id="typeBtnRecrue" class="typeBtn" onclick="setType('recrue')" style="flex:1;padding:.7rem;border-radius:10px;border:1.5px solid var(--border2);background:transparent;color:var(--txt2);font-weight:700;font-size:.82rem;cursor:pointer;font-family:inherit">🤝 Futur(e) collaborateur/trice</button>
+  </div>
+
+  <label>Nom complet</label>
+  <input id="fNom" class="fi" placeholder="Votre nom et prénom">
+
+  <label>Email</label>
+  <input id="fEmail" type="email" class="fi" placeholder="votre@email.com">
+
+  <label>Téléphone</label>
+  <input id="fTel" class="fi" placeholder="+242 ...">
+
+  <p class="err" id="errMsg"></p>
+
+  <button class="btn" id="genBtn" onclick="genererAcces()">Générer mon accès</button>
+</div>
+
+<div class="box" id="redirectBox" style="display:none">
+  <div class="redirectMsg">
+    <div class="spin2"></div>
+    <p style="font-weight:700;margin-bottom:.4rem">Accès généré ✅</p>
+    <p style="color:var(--txt2);font-size:.84rem">Redirection vers le contrat…</p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ⚠️ Mêmes identifiants que contrat-recrue.html / contrat-client.html / admin-contrats.html — projet Supabase dédié aux contrats */
+const SUPABASE_URL = 'https://pneqjkfndyijfmwbtaqp.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_5m9qA03BduqJLNdRvoaYiA_3yd8MvQO';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/* URLs des formulaires de contrat vers lesquels rediriger une fois le code généré */
+const URLS = {
+  client: 'https://infotelcom-contrats.netlify.app/contrat-client.html',
+  recrue: 'https://infotelcom-contrats.netlify.app/contrat-recrue.html'
+};
+
+let selectedType = 'client';
+function setType(t){
+  selectedType = t;
+  const map = {
+    client: ['typeBtnClient','typeBtnRecrue'],
+    recrue: ['typeBtnRecrue','typeBtnClient']
+  };
+  const [onId, offId] = map[t];
+  const onBtn = document.getElementById(onId);
+  const offBtn = document.getElementById(offId);
+  onBtn.style.borderColor = 'var(--blue)';
+  onBtn.style.background = 'rgba(0,166,255,.1)';
+  onBtn.style.color = 'var(--txt)';
+  offBtn.style.borderColor = 'var(--border2)';
+  offBtn.style.background = 'transparent';
+  offBtn.style.color = 'var(--txt2)';
+}
+
+function genererCode(){
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // sans caractères ambigus (0/O, 1/I)
+  let code='';
+  for(let i=0;i<12;i++) code+=chars[Math.floor(Math.random()*chars.length)];
+  return code;
+}
+
+async function genererAcces(){
+  const nom = document.getElementById('fNom').value.trim();
+  const email = document.getElementById('fEmail').value.trim();
+  const tel = document.getElementById('fTel').value.trim();
+  const errEl = document.getElementById('errMsg');
+  errEl.classList.remove('show');
+
+  if(!nom || !email || !tel){
+    errEl.textContent = 'Merci de remplir les trois champs.';
+    errEl.classList.add('show');
+    return;
+  }
+  if(!/^\S+@\S+\.\S+$/.test(email)){
+    errEl.textContent = 'Adresse email invalide.';
+    errEl.classList.add('show');
+    return;
+  }
+
+  const btn = document.getElementById('genBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span> Génération...';
+
+  const code = genererCode();
+
+  const { error } = await sb.from('acces_codes').insert([{
+    code, nom, email, telephone: tel,
+    type_demande: selectedType,
+    utilise: false,
+    user_agent: navigator.userAgent
+  }]);
+
+  if(error){
+    btn.disabled = false;
+    btn.textContent = 'Générer mon accès';
+    errEl.textContent = "Erreur : impossible de générer l'accès (" + error.message + "). Réessayez.";
+    errEl.classList.add('show');
+    return;
+  }
+
+  document.getElementById('formBox').style.display = 'none';
+  document.getElementById('redirectBox').style.display = 'block';
+
+  setTimeout(() => {
+    window.location.href = URLS[selectedType] + '?code=' + encodeURIComponent(code);
+  }, 1200);
+}
+</script>
+</body>
+</html>
