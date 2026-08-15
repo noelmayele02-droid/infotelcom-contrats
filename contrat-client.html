@@ -367,7 +367,12 @@ function paintSigBackground(){
 }
 
 function resizeCanvas(preserve){
-  const prevData = preserve && hasSignature ? canvas.toDataURL('image/png') : null;
+  const prevSnapshot = preserve && hasSignature ? document.createElement('canvas') : null;
+  if(prevSnapshot){
+    prevSnapshot.width = canvas.width;
+    prevSnapshot.height = canvas.height;
+    prevSnapshot.getContext('2d').drawImage(canvas, 0, 0);
+  }
   const rect=canvas.getBoundingClientRect();
   const ratio=window.devicePixelRatio||1;
   canvas.width=rect.width*ratio;
@@ -378,10 +383,8 @@ function resizeCanvas(preserve){
   ctx.lineWidth=2.6;
   ctx.lineCap='round';
   ctx.lineJoin='round';
-  if(prevData){
-    const img=new Image();
-    img.onload=()=>ctx.drawImage(img,0,0,canvas.width/ratio,canvas.height/ratio);
-    img.src=prevData;
+  if(prevSnapshot){
+    ctx.drawImage(prevSnapshot, 0, 0, prevSnapshot.width, prevSnapshot.height, 0, 0, canvas.width/ratio, canvas.height/ratio);
   }
 }
 window.addEventListener('resize',()=>resizeCanvas(true));
